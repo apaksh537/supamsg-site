@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SupaMsg — WhatsApp, supercharged.</title>
+<meta name="description" content="48 powerful features for WhatsApp on desktop. Multi-account, AI, scheduling, privacy & more. Free download.">
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#25D366;--green-dark:#1da851;
+  --teal:#06b6d4;--blue:#0ea5e9;--indigo:#6366f1;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+  --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;
+  --gray-800:#1f2937;--gray-900:#111827;
+  --radius:12px;--radius-lg:20px;--radius-pill:999px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+  --shadow:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);
+  --shadow-lg:0 20px 40px -12px rgba(0,0,0,.15);
+  --shadow-xl:0 25px 50px -12px rgba(0,0,0,.25);
+  --gradient-main:linear-gradient(135deg,#25D366 0%,#06b6d4 50%,#0ea5e9 100%);
+  --gradient-dark:linear-gradient(135deg,#064e3b 0%,#0f766e 40%,#0c4a6e 100%);
+  --gradient-hero:linear-gradient(135deg,#ecfdf5 0%,#f0fdfa 30%,#ecfeff 60%,#f0f9ff 100%);
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:var(--gray-800);line-height:1.6;overflow-x:hidden;background:#fff}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+h1,h2,h3,h4,h5,h6{line-height:1.2;font-weight:700}
+
+/* ===== UTILITIES ===== */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.section-pad{padding:100px 0}
+.text-center{text-align:center}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:var(--radius-pill);font-size:.8125rem;font-weight:600;letter-spacing:.02em}
+.badge-gradient{background:var(--gradient-main);color:#fff}
+.badge-outline{border:1.5px solid var(--gray-200);color:var(--gray-600);background:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:var(--radius-pill);font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:all .25s ease;text-decoration:none}
+.btn-primary{background:var(--gradient-main);color:#fff;box-shadow:0 4px 15px rgba(37,211,102,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,211,102,.4)}
+.btn-secondary{background:#fff;color:var(--gray-800);border:1.5px solid var(--gray-200)}
+.btn-secondary:hover{border-color:var(--gray-300);background:var(--gray-50);transform:translateY(-1px)}
+.btn-white{background:#fff;color:var(--gray-800);box-shadow:var(--shadow)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.btn-sm{padding:10px 22px;font-size:.875rem}
+.section-label{font-size:.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.section-title{font-size:clamp(2rem,4vw,3rem);margin-bottom:16px;letter-spacing:-.03em}
+.section-subtitle{font-size:1.125rem;color:var(--gray-500);max-width:600px;margin:0 auto 48px}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease,transform .7s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .7s ease,transform .7s ease}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(.92);transition:opacity .7s ease,transform .7s ease}
+.reveal-scale.visible{opacity:1;transform:scale(1)}
+
+/* ===== STICKY NAV ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 0;transition:all .3s ease;background:rgba(255,255,255,0);backdrop-filter:blur(0px)}
+.nav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06);padding:10px 0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 24px}
+.nav-logo{font-size:1.375rem;font-weight:800;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.nav-logo svg{width:28px;height:28px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:.9rem;font-weight:500;color:var(--gray-600);transition:color .2s}
+.nav-links a:hover{color:var(--gray-900)}
+.nav-cta .btn{padding:10px 24px;font-size:.875rem}
+.nav-mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--gray-700);margin:5px 0;transition:all .3s;border-radius:2px}
+
+/* ===== HERO ===== */
+.hero{position:relative;padding:160px 0 100px;overflow:hidden;min-height:100vh;display:flex;align-items:center}
+.hero-mesh{position:absolute;inset:0;overflow:hidden;z-index:0}
+.hero-mesh::before,.hero-mesh::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;animation:meshFloat 12s ease-in-out infinite}
+.hero-mesh::before{width:600px;height:600px;background:radial-gradient(circle,rgba(37,211,102,.3),transparent 70%);top:-10%;left:-5%;animation-delay:0s}
+.hero-mesh::after{width:500px;height:500px;background:radial-gradient(circle,rgba(14,165,233,.25),transparent 70%);bottom:0;right:-5%;animation-delay:-4s}
+.hero-mesh-orb1,.hero-mesh-orb2,.hero-mesh-orb3{position:absolute;border-radius:50%;filter:blur(80px);animation:meshFloat 12s ease-in-out infinite}
+.hero-mesh-orb1{width:450px;height:450px;background:radial-gradient(circle,rgba(6,182,212,.25),transparent 70%);top:30%;left:40%;animation-delay:-2s}
+.hero-mesh-orb2{width:350px;height:350px;background:radial-gradient(circle,rgba(37,211,102,.2),transparent 70%);top:60%;right:20%;animation-delay:-6s}
+.hero-mesh-orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);top:10%;right:30%;animation-delay:-8s}
+@keyframes meshFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(30px,-40px) scale(1.05)}
+  50%{transform:translate(-20px,30px) scale(.95)}
+  75%{transform:translate(40px,20px) scale(1.03)}
+}
+.hero .container{position:relative;z-index:1}
+.hero-content{max-width:720px;margin:0 auto;text-align:center}
+.hero-badge{margin-bottom:24px}
+.hero h1{font-size:clamp(2.75rem,6vw,4.5rem);letter-spacing:-.04em;margin-bottom:20px;line-height:1.05}
+.hero h1 span{background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--gray-500);margin-bottom:36px;max-width:540px;margin-left:auto;margin-right:auto}
+.hero-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.hero-trust{display:flex;align-items:center;justify-content:center;gap:16px;font-size:.8125rem;color:var(--gray-400);flex-wrap:wrap}
+.hero-trust span{display:flex;align-items:center;gap:5px}
+.hero-screenshot{margin-top:60px;position:relative}
+.hero-screenshot img{border-radius:var(--radius-lg);box-shadow:var(--shadow-xl);margin:0 auto;max-width:900px;width:100%}
+.hero-screenshot::before{content:'';position:absolute;inset:-2px;border-radius:22px;background:var(--gradient-main);z-index:-1;opacity:.2}
+.hero-glow{position:absolute;width:80%;height:60%;bottom:-10%;left:10%;background:var(--gradient-main);filter:blur(100px);opacity:.12;border-radius:50%;z-index:0}
+
+/* ===== SVG WAVE DIVIDERS ===== */
+.wave-divider{width:100%;line-height:0;overflow:hidden}
+.wave-divider svg{width:100%;height:auto;display:block}
+.wave-divider-flip{transform:scaleY(-1)}
+
+/* ===== SOCIAL PROOF / COUNTERS ===== */
+.social-proof{background:var(--gray-50);padding:80px 0}
+.counters{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.counter-item{text-align:center}
+.counter-number{font-size:clamp(2.5rem,5vw,3.5rem);font-weight:800;letter-spacing:-.04em;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.counter-label{font-size:.9375rem;color:var(--gray-500);margin-top:6px;font-weight:500}
+
+/* ===== FEATURE SECTIONS ===== */
+.feature-section{padding:100px 0}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.feature-grid.reverse .feature-text{order:2}
+.feature-grid.reverse .feature-image{order:1}
+.feature-text .badge{margin-bottom:16px}
+.feature-text h2{font-size:clamp(1.75rem,3.5vw,2.5rem);letter-spacing:-.03em;margin-bottom:16px}
+.feature-text p{font-size:1.0625rem;color:var(--gray-500);margin-bottom:24px;line-height:1.7}
+.feature-list{display:flex;flex-direction:column;gap:12px}
+.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:.9375rem;color:var(--gray-600)}
+.feature-list li svg{flex-shrink:0;margin-top:3px}
+.feature-image{position:relative}
+.feature-image img{border-radius:var(--radius-lg);box-shadow:var(--shadow-lg)}
+.feature-image::after{content:'';position:absolute;inset:-1px;border-radius:22px;background:var(--gradient-main);z-index:-1;opacity:.12}
+
+.feature-dark{background:var(--gradient-dark);color:#fff;position:relative;overflow:hidden}
+.feature-dark .section-label{-webkit-text-fill-color:#6ee7b7;color:#6ee7b7}
+.feature-dark .feature-text h2{color:#fff}
+.feature-dark .feature-text p{color:rgba(255,255,255,.7)}
+.feature-dark .feature-list li{color:rgba(255,255,255,.8)}
+.feature-dark .feature-list li svg path{stroke:#6ee7b7}
+.feature-dark .badge-gradient{background:rgba(255,255,255,.15)}
+
+.feature-gradient{background:linear-gradient(135deg,#ecfdf5 0%,#ecfeff 50%,#f0f9ff 100%);position:relative}
+
+/* ===== USE CASES ===== */
+.use-cases{padding:100px 0;background:#fff}
+.use-case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.use-case-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:36px 28px;transition:all .3s ease;position:relative;overflow:hidden}
+.use-case-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-main);opacity:0;transition:opacity .3s}
+.use-case-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:transparent}
+.use-case-card:hover::before{opacity:1}
+.use-case-icon{width:52px;height:52px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:1.5rem}
+.use-case-card:nth-child(1) .use-case-icon{background:linear-gradient(135deg,#d1fae5,#a7f3d0)}
+.use-case-card:nth-child(2) .use-case-icon{background:linear-gradient(135deg,#cffafe,#a5f3fc)}
+.use-case-card:nth-child(3) .use-case-icon{background:linear-gradient(135deg,#dbeafe,#bfdbfe)}
+.use-case-card:nth-child(4) .use-case-icon{background:linear-gradient(135deg,#fce7f3,#fbcfe8)}
+.use-case-card:nth-child(5) .use-case-icon{background:linear-gradient(135deg,#fef3c7,#fde68a)}
+.use-case-card:nth-child(6) .use-case-icon{background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+.use-case-card h3{font-size:1.125rem;margin-bottom:8px}
+.use-case-card p{font-size:.9rem;color:var(--gray-500);line-height:1.6}
+
+/* ===== FULL FEATURES LIST ===== */
+.features-list-section{background:var(--gray-50);padding:100px 0}
+.features-categories{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+.feature-category h3{font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.feature-category h3 span{width:8px;height:8px;border-radius:50%}
+.feature-category ul{display:flex;flex-direction:column;gap:10px}
+.feature-category li{display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--gray-600)}
+.feature-category li svg{flex-shrink:0}
+
+/* ===== iOS COMPANION ===== */
+.ios-section{background:var(--gradient-dark);color:#fff;padding:100px 0;position:relative;overflow:hidden}
+.ios-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.ios-section .section-label{-webkit-text-fill-color:#6ee7b7;color:#6ee7b7}
+.ios-section h2{color:#fff;font-size:clamp(1.75rem,3.5vw,2.5rem);letter-spacing:-.03em;margin-bottom:16px}
+.ios-section p{color:rgba(255,255,255,.7);font-size:1.0625rem;line-height:1.7;margin-bottom:24px}
+.ios-section .feature-list li{color:rgba(255,255,255,.8)}
+.ios-section .feature-list li svg path{stroke:#6ee7b7}
+.ios-image img{border-radius:var(--radius-lg);box-shadow:0 25px 60px rgba(0,0,0,.4)}
+
+/* ===== TESTIMONIALS ===== */
+.testimonials{padding:100px 0;background:#fff}
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testimonial-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:32px;transition:all .3s ease}
+.testimonial-card:hover{box-shadow:var(--shadow-lg);border-color:transparent;transform:translateY(-3px)}
+.testimonial-stars{color:#fbbf24;margin-bottom:16px;font-size:1rem;letter-spacing:2px}
+.testimonial-text{font-size:.9375rem;color:var(--gray-600);line-height:1.7;margin-bottom:24px}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.testimonial-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.875rem;color:#fff}
+.testimonial-card:nth-child(1) .testimonial-avatar{background:linear-gradient(135deg,#25D366,#06b6d4)}
+.testimonial-card:nth-child(2) .testimonial-avatar{background:linear-gradient(135deg,#0ea5e9,#6366f1)}
+.testimonial-card:nth-child(3) .testimonial-avatar{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.testimonial-name{font-weight:600;font-size:.9rem}
+.testimonial-role{font-size:.8rem;color:var(--gray-400)}
+
+/* ===== PRICING ===== */
+.pricing{padding:100px 0;background:var(--gray-50)}
+.pricing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:48px}
+.pricing-toggle span{font-size:.875rem;color:var(--gray-500);font-weight:500}
+.pricing-toggle span.active{color:var(--gray-800);font-weight:600}
+.toggle-switch{width:48px;height:26px;background:var(--gray-300);border-radius:13px;cursor:pointer;position:relative;transition:background .3s}
+.toggle-switch.active{background:var(--green)}
+.toggle-switch::after{content:'';position:absolute;width:22px;height:22px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .3s;box-shadow:var(--shadow-sm)}
+.toggle-switch.active::after{transform:translateX(22px)}
+.pricing-save{background:linear-gradient(135deg,#d1fae5,#cffafe);color:#047857;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:var(--radius-pill);margin-left:6px}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start}
+.pricing-card{background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-lg);padding:36px 32px;transition:all .3s ease;position:relative}
+.pricing-card:hover{box-shadow:var(--shadow-lg)}
+.pricing-card.popular{border-color:transparent;box-shadow:0 0 0 2px var(--green),var(--shadow-xl);transform:scale(1.03)}
+.pricing-card.popular::before{content:'';position:absolute;inset:-3px;border-radius:22px;background:var(--gradient-main);z-index:-1;opacity:.25;filter:blur(8px)}
+.pricing-card-label{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gradient-main);color:#fff;font-size:.75rem;font-weight:700;padding:4px 18px;border-radius:var(--radius-pill);white-space:nowrap}
+.pricing-name{font-size:1.125rem;font-weight:700;margin-bottom:4px}
+.pricing-desc{font-size:.8125rem;color:var(--gray-400);margin-bottom:20px}
+.pricing-price{display:flex;align-items:baseline;gap:4px;margin-bottom:24px}
+.pricing-amount{font-size:3rem;font-weight:800;letter-spacing:-.04em;line-height:1}
+.pricing-period{font-size:.875rem;color:var(--gray-400)}
+.pricing-features{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;padding-top:24px;border-top:1px solid var(--gray-100)}
+.pricing-features li{display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--gray-600)}
+.pricing-features li svg{flex-shrink:0}
+.pricing-features li.disabled{color:var(--gray-300)}
+.pricing-features li.disabled svg path{stroke:var(--gray-300)}
+
+/* ===== FAQ ===== */
+.faq{padding:100px 0;background:#fff}
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--gray-200)}
+.faq-question{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 0;background:none;border:none;cursor:pointer;font-size:1rem;font-weight:600;color:var(--gray-800);text-align:left}
+.faq-question svg{flex-shrink:0;transition:transform .3s;color:var(--gray-400)}
+.faq-item.open .faq-question svg{transform:rotate(45deg);color:var(--green)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease}
+.faq-item.open .faq-answer{max-height:300px}
+.faq-answer p{padding-bottom:20px;font-size:.9375rem;color:var(--gray-500);line-height:1.7}
+
+/* ===== FINAL CTA ===== */
+.final-cta{background:var(--gradient-dark);padding:100px 0;position:relative;overflow:hidden;text-align:center;color:#fff}
+.final-cta::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,211,102,.2),transparent 70%);top:-20%;right:-10%;filter:blur(60px)}
+.final-cta::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.15),transparent 70%);bottom:-20%;left:-5%;filter:blur(60px)}
+.final-cta .container{position:relative;z-index:1}
+.final-cta h2{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.03em;margin-bottom:16px}
+.final-cta p{color:rgba(255,255,255,.7);font-size:1.125rem;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto}
+
+/* ===== FOOTER ===== */
+footer{background:var(--gray-900);color:var(--gray-400);padding:60px 0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer-brand p{font-size:.875rem;line-height:1.7;margin-top:12px;max-width:280px}
+.footer-col h4{color:#fff;font-size:.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+.footer-col a{display:block;font-size:.875rem;padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:.8125rem;flex-wrap:wrap;gap:12px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .feature-grid,.ios-grid{gap:40px}
+  .features-categories{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(255,255,255,.98);backdrop-filter:blur(16px);padding:24px;gap:16px;border-bottom:1px solid var(--gray-200);box-shadow:var(--shadow-lg)}
+  .hero{padding:130px 0 60px;min-height:auto}
+  .hero h1{font-size:2.5rem}
+  .feature-grid,.feature-grid.reverse,.ios-grid{grid-template-columns:1fr;text-align:center}
+  .feature-grid.reverse .feature-text,.feature-grid.reverse .feature-image{order:unset}
+  .feature-list{align-items:center}
+  .counters{grid-template-columns:repeat(2,1fr);gap:24px}
+  .use-case-grid,.testimonial-grid,.pricing-grid{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto}
+  .pricing-card.popular{transform:none}
+  .features-categories{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .section-pad{padding:70px 0}
+  .hero-buttons{flex-direction:column;align-items:center}
+  .hero-buttons .btn{width:100%;max-width:300px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2rem}
+  .counters{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="url(#logo-grad)"/><path d="M8 19.5l1.5-4.5L18 8l2 2-7 8.5-4.5 1.5z" fill="#fff" opacity=".9"/><path d="M9.5 15l1.2 3.3L14 17" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/><defs><linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#25D366"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs></svg>
+      SupaMsg
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Features</a>
+      <a href="#use-cases">Use Cases</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <a href="https://github.com/apaksh537/supamsg/releases/download/v1.0.0/SupaMsg-1.0.0-arm64.dmg" class="btn btn-primary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download Free
+      </a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-mesh">
+    <div class="hero-mesh-orb1"></div>
+    <div class="hero-mesh-orb2"></div>
+    <div class="hero-mesh-orb3"></div>
+  </div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge badge-gradient">v1.0 just launched</span>
+      </div>
+      <h1>WhatsApp, <span>supercharged.</span></h1>
+      <p class="hero-sub">48 powerful features packed into one beautiful desktop app. Multi-account, AI replies, scheduling, privacy tools &mdash; everything WhatsApp should have been.</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/apaksh537/supamsg/releases/download/v1.0.0/SupaMsg-1.0.0-arm64.dmg" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download for macOS
+        </a>
+        <a href="#features" class="btn btn-secondary">See all features</a>
+      </div>
+      <div class="hero-trust">
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> 100% Private</span>
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Free to use</span>
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> macOS native</span>
+      </div>
+    </div>
+    <div class="hero-screenshot reveal-scale">
+      <img src="screenshots/01-hero-shot.png" alt="SupaMsg desktop app screenshot showing the main interface" loading="eager">
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Hero → Social Proof ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#f9fafb" d="M0,40 C360,100 720,0 1080,60 C1260,80 1380,50 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== SOCIAL PROOF / COUNTERS ===== -->
+<section class="social-proof">
+  <div class="container">
+    <div class="counters">
+      <div class="counter-item reveal">
+        <div class="counter-number" data-target="48">0</div>
+        <div class="counter-label">Features</div>
+      </div>
+      <div class="counter-item reveal">
+        <div class="counter-number" data-target="50">0</div>
+        <div class="counter-label">Countries</div>
+      </div>
+      <div class="counter-item reveal">
+        <div class="counter-number" data-target="25">0</div>
+        <div class="counter-label">Languages</div>
+      </div>
+      <div class="counter-item reveal">
+        <div class="counter-number" data-target="100">0</div>
+        <div class="counter-label">Private</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Social Proof → Features ===== -->
+<div class="wave-divider wave-divider-flip">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#f9fafb" d="M0,40 C360,100 720,0 1080,60 C1260,80 1380,50 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FEATURE 1: Multi-Account ===== -->
+<section class="feature-section" id="features">
+  <div class="container">
+    <div class="feature-grid">
+      <div class="feature-text reveal-left">
+        <span class="badge badge-outline">Multi-Account</span>
+        <p class="section-label">Run them all</p>
+        <h2>Multiple WhatsApp accounts. One app.</h2>
+        <p>Seamlessly switch between personal, work, and business accounts without logging out. Each account runs independently with its own notifications and settings.</p>
+        <ul class="feature-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 5 accounts simultaneously</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Independent notification controls</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Quick-switch keyboard shortcuts</li>
+        </ul>
+      </div>
+      <div class="feature-image reveal-right">
+        <img src="screenshots/02-multi-account.png" alt="Multi-account feature showing multiple WhatsApp sessions" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: White → Dark ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#064e3b" d="M0,60 C240,20 480,80 720,40 C960,0 1200,70 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FEATURE 2: AI Features (Dark) ===== -->
+<section class="feature-section feature-dark">
+  <div class="container">
+    <div class="feature-grid reverse">
+      <div class="feature-text reveal-right">
+        <span class="badge badge-gradient">AI-Powered</span>
+        <p class="section-label">Smart replies</p>
+        <h2>AI that writes like you.</h2>
+        <p>Generate contextual replies, translate messages instantly, summarize long conversations, and adjust your tone&mdash;all powered by AI that learns your style.</p>
+        <ul class="feature-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Context-aware reply suggestions</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Instant message translation</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Conversation summaries</li>
+        </ul>
+      </div>
+      <div class="feature-image reveal-left">
+        <img src="screenshots/03-ai-features.png" alt="AI features showing smart reply suggestions" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Dark → White ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#fff" d="M0,60 C360,0 720,80 1080,30 C1260,10 1380,50 1440,60 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FEATURE 3: Scheduling ===== -->
+<section class="feature-section">
+  <div class="container">
+    <div class="feature-grid">
+      <div class="feature-text reveal-left">
+        <span class="badge badge-outline">Scheduling</span>
+        <p class="section-label">Send later</p>
+        <h2>Schedule messages to any timezone.</h2>
+        <p>Plan your messages ahead. Schedule birthday wishes, business follow-ups, or reminders to be sent at the perfect time&mdash;even while you sleep.</p>
+        <ul class="feature-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Timezone-aware scheduling</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Recurring message support</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Visual schedule calendar</li>
+        </ul>
+      </div>
+      <div class="feature-image reveal-right">
+        <img src="screenshots/04-schedule.png" alt="Message scheduling interface with calendar view" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: White → Gradient ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#ecfdf5" d="M0,40 C480,90 960,10 1440,50 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FEATURE 4: Privacy (Gradient) ===== -->
+<section class="feature-section feature-gradient">
+  <div class="container">
+    <div class="feature-grid reverse">
+      <div class="feature-text reveal-right">
+        <span class="badge badge-outline">Privacy First</span>
+        <p class="section-label">Your data, your rules</p>
+        <h2>Privacy tools that actually work.</h2>
+        <p>Chat lock, hidden mode, stealth reading, and anti-revoke keep your conversations truly private. Everything stays on your device&mdash;nothing touches our servers.</p>
+        <ul class="feature-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Chat lock with biometrics</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Read receipts control</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Anti-delete for messages</li>
+        </ul>
+      </div>
+      <div class="feature-image reveal-left">
+        <img src="screenshots/05-privacy.png" alt="Privacy features with chat lock and stealth mode" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Gradient → White ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#fff" d="M0,50 C360,90 720,10 1080,60 C1260,75 1380,40 1440,50 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== USE CASES ===== -->
+<section class="use-cases" id="use-cases">
+  <div class="container text-center">
+    <p class="section-label">Use Cases</p>
+    <h2 class="section-title">Built for the way you work.</h2>
+    <p class="section-subtitle">From solo freelancers to growing teams, SupaMsg adapts to your workflow.</p>
+    <div class="use-case-grid">
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">&#128187;</div>
+        <h3>Freelancers</h3>
+        <p>Separate personal and client chats. Schedule follow-ups and use AI to draft professional replies in seconds.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">&#128188;</div>
+        <h3>Business Owners</h3>
+        <p>Manage multiple business lines from a single app. Quick replies, chat labels, and bulk messaging save hours.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">&#127968;</div>
+        <h3>Real Estate</h3>
+        <p>Respond to property inquiries instantly with AI-powered templates. Schedule viewings and follow up automatically.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">&#128200;</div>
+        <h3>Sales Teams</h3>
+        <p>Track conversations, set reminders, and never miss a lead. CRM-style organization for all your chats.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">&#127775;</div>
+        <h3>Customer Support</h3>
+        <p>Quick replies, canned responses, and AI summaries make handling support queries a breeze.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">&#128640;</div>
+        <h3>Agencies</h3>
+        <p>Run client accounts side by side. Team collaboration features keep everyone on the same page.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: White → Gray ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#f9fafb" d="M0,30 C240,80 480,10 720,50 C960,90 1200,20 1440,60 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FULL FEATURES LIST ===== -->
+<section class="features-list-section" id="all-features">
+  <div class="container text-center">
+    <p class="section-label">Everything included</p>
+    <h2 class="section-title">48 features. Zero compromises.</h2>
+    <p class="section-subtitle">Every feature you've wished WhatsApp had, now available on your desktop.</p>
+    <div class="features-categories" style="text-align:left">
+      <div class="feature-category reveal">
+        <h3><span style="background:var(--green)"></span> Messaging</h3>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Scheduled messages</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Recurring messages</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Bulk messaging</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Quick reply templates</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Message formatting tools</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Auto-reply rules</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Message search &amp; filter</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Pin unlimited chats</li>
+        </ul>
+      </div>
+      <div class="feature-category reveal">
+        <h3><span style="background:var(--teal)"></span> AI &amp; Productivity</h3>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> AI reply suggestions</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> AI message translation</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Conversation summaries</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tone adjustment</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Chat labels &amp; folders</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Contact notes</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Keyboard shortcuts</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Focus mode</li>
+        </ul>
+      </div>
+      <div class="feature-category reveal">
+        <h3><span style="background:var(--blue)"></span> Privacy &amp; Security</h3>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Chat lock</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Hidden chats</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Stealth read mode</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Anti-delete messages</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Screenshot protection</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Read receipt control</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Online status hide</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Typing indicator control</li>
+        </ul>
+      </div>
+      <div class="feature-category reveal">
+        <h3><span style="background:#f59e0b"></span> Media &amp; Files</h3>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Batch media download</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Status saver</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Image editor</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> File manager</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Drag &amp; drop sharing</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> HD media sending</li>
+        </ul>
+      </div>
+      <div class="feature-category reveal">
+        <h3><span style="background:#8b5cf6"></span> Accounts</h3>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Multi-account support</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Account switching</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Per-account settings</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Account color coding</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Notification routing</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> iOS companion sync</li>
+        </ul>
+      </div>
+      <div class="feature-category reveal">
+        <h3><span style="background:#ec4899"></span> Customization</h3>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Custom themes</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Chat wallpapers</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Font customization</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Notification sounds</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Layout options</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dark / light mode</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Gray → Dark (iOS) ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#064e3b" d="M0,50 C480,10 960,90 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== iOS COMPANION ===== -->
+<section class="ios-section">
+  <div class="container">
+    <div class="ios-grid">
+      <div class="reveal-left">
+        <p class="section-label">iOS Companion</p>
+        <h2>Your accounts, in your pocket.</h2>
+        <p>The SupaMsg iOS companion app keeps your accounts synced on the go. Get notifications, quick-reply, and manage settings&mdash;all from your iPhone.</p>
+        <ul class="feature-list">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Real-time sync with desktop</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Push notifications</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Quick reply from lock screen</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Face ID / Touch ID unlock</li>
+        </ul>
+        <div style="margin-top:28px">
+          <a href="#" class="btn btn-white btn-sm">Coming soon on iOS</a>
+        </div>
+      </div>
+      <div class="ios-image reveal-right">
+        <img src="screenshots/08-ios-companion.png" alt="SupaMsg iOS companion app on iPhone" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Dark → White (Testimonials) ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#fff" d="M0,40 C360,100 720,0 1080,60 C1260,80 1380,50 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials">
+  <div class="container text-center">
+    <p class="section-label">Testimonials</p>
+    <h2 class="section-title">Loved by power users.</h2>
+    <p class="section-subtitle">Here's what our early adopters are saying about SupaMsg.</p>
+    <div class="testimonial-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">"Managing 3 WhatsApp accounts was a nightmare before SupaMsg. Now I switch between personal, business, and my NGO in one click. The AI replies save me at least 2 hours daily."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">RM</div>
+          <div>
+            <div class="testimonial-name">Rahul Mehta</div>
+            <div class="testimonial-role">Freelance Consultant, Mumbai</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">"Our agency manages 15 client accounts. SupaMsg's multi-account feature and scheduled messaging have completely transformed how we handle client communication."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SK</div>
+          <div>
+            <div class="testimonial-name">Sarah Kim</div>
+            <div class="testimonial-role">Agency Owner, Singapore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">"I close deals 30% faster now. The scheduling feature means I reach clients in their timezone, and AI-powered replies keep conversations going even when I'm at viewings."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">CV</div>
+          <div>
+            <div class="testimonial-name">Carlos Vega</div>
+            <div class="testimonial-role">Real Estate Agent, Miami</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: White → Gray (Pricing) ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#f9fafb" d="M0,60 C240,20 480,80 720,40 C960,0 1200,70 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== PRICING ===== -->
+<section class="pricing" id="pricing">
+  <div class="container text-center">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Simple, transparent pricing.</h2>
+    <p class="section-subtitle">Start free, upgrade when you need more power.</p>
+    <div class="pricing-toggle">
+      <span class="active" id="toggleMonthly">Monthly</span>
+      <div class="toggle-switch" id="billingToggle" role="button" tabindex="0" aria-label="Toggle annual billing"></div>
+      <span id="toggleAnnual">Annual</span>
+      <span class="pricing-save">Save 20%</span>
+    </div>
+    <div class="pricing-grid">
+      <!-- FREE -->
+      <div class="pricing-card reveal">
+        <div class="pricing-name">Free</div>
+        <div class="pricing-desc">For personal use</div>
+        <div class="pricing-price">
+          <span class="pricing-amount" data-inr-m="0" data-usd-m="0" data-inr-y="0" data-usd-y="0"><span class="currency-symbol">$</span>0</span>
+          <span class="pricing-period">forever</span>
+        </div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 WhatsApp account</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Basic privacy tools</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Custom themes</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Media downloads</li>
+          <li class="disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> AI features</li>
+          <li class="disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Scheduled messages</li>
+        </ul>
+        <a href="https://github.com/apaksh537/supamsg/releases/download/v1.0.0/SupaMsg-1.0.0-arm64.dmg" class="btn btn-secondary" style="width:100%">Download Free</a>
+      </div>
+      <!-- PRO -->
+      <div class="pricing-card popular reveal">
+        <div class="pricing-card-label">Most Popular</div>
+        <div class="pricing-name">Pro</div>
+        <div class="pricing-desc">For power users</div>
+        <div class="pricing-price">
+          <span class="pricing-amount price-dynamic" data-inr-m="499" data-usd-m="6" data-inr-y="399" data-usd-y="5"><span class="currency-symbol">$</span><span class="price-value">6</span></span>
+          <span class="pricing-period price-period">/mo</span>
+        </div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 3 accounts</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All privacy tools</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> AI reply suggestions</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Scheduled messages</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Chat translation</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Priority support</li>
+        </ul>
+        <a href="https://github.com/apaksh537/supamsg/releases/download/v1.0.0/SupaMsg-1.0.0-arm64.dmg" class="btn btn-primary" style="width:100%">Get Pro</a>
+      </div>
+      <!-- BUSINESS -->
+      <div class="pricing-card reveal">
+        <div class="pricing-name">Business</div>
+        <div class="pricing-desc">For teams &amp; agencies</div>
+        <div class="pricing-price">
+          <span class="pricing-amount price-dynamic" data-inr-m="999" data-usd-m="12" data-inr-y="799" data-usd-y="10"><span class="currency-symbol">$</span><span class="price-value">12</span></span>
+          <span class="pricing-period price-period">/mo</span>
+        </div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 5 accounts</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Pro</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Bulk messaging</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Team collaboration</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> CRM integrations</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dedicated support</li>
+        </ul>
+        <a href="https://github.com/apaksh537/supamsg/releases/download/v1.0.0/SupaMsg-1.0.0-arm64.dmg" class="btn btn-secondary" style="width:100%">Get Business</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: Gray → White (FAQ) ===== -->
+<div class="wave-divider wave-divider-flip">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#f9fafb" d="M0,40 C360,100 720,0 1080,60 C1260,80 1380,50 1440,40 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="text-center">
+      <p class="section-label">FAQ</p>
+      <h2 class="section-title">Frequently asked questions.</h2>
+      <p class="section-subtitle">Everything you need to know about SupaMsg.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">
+          Is SupaMsg safe to use?
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Absolutely. SupaMsg is a desktop wrapper that enhances the official WhatsApp Web experience. Your messages stay end-to-end encrypted just like the original WhatsApp. We never store, read, or transmit your messages. Everything runs locally on your machine.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Will my WhatsApp account get banned?
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>No. SupaMsg uses the official WhatsApp Web protocol. It's functionally equivalent to using WhatsApp in your browser&mdash;just with extra features layered on top. Thousands of users across 50+ countries use it daily without issues.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Does it work on Windows and Linux?
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Currently, SupaMsg is available for macOS (Apple Silicon and Intel). Windows and Linux versions are in active development and will be available soon. Join our waitlist to be notified when they launch.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          How does the AI feature work?
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>The AI features are powered by state-of-the-art language models. Your conversation context is processed locally when possible, and only minimal data is sent to the AI provider when needed for complex tasks. You have full control over what data the AI can access.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Can I use multiple WhatsApp numbers?
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Yes! Multi-account is one of our flagship features. On the Free plan you get 1 account, Pro supports up to 3, and Business supports up to 5. Each account runs independently with its own settings and notifications.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          What's your refund policy?
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>We offer a 14-day money-back guarantee on all paid plans. If you're not satisfied for any reason, contact our support team and we'll process a full refund&mdash;no questions asked.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SVG WAVE: White → Dark CTA ===== -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px"><path fill="#064e3b" d="M0,40 C480,90 960,10 1440,50 L1440,100 L0,100 Z"/></svg>
+</div>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final-cta">
+  <div class="container">
+    <span class="badge badge-gradient" style="margin-bottom:20px;display:inline-flex">Free forever plan available</span>
+    <h2>Ready to supercharge<br>your WhatsApp?</h2>
+    <p>Join thousands of users who've upgraded their WhatsApp experience. Download SupaMsg for free today.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="https://github.com/apaksh537/supamsg/releases/download/v1.0.0/SupaMsg-1.0.0-arm64.dmg" class="btn btn-primary" style="background:#fff;color:var(--gray-900);box-shadow:var(--shadow-lg)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download for macOS
+      </a>
+      <a href="#pricing" class="btn" style="border:1.5px solid rgba(255,255,255,.25);color:#fff">View pricing</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="color:#fff">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="url(#logo-grad2)"/><path d="M8 19.5l1.5-4.5L18 8l2 2-7 8.5-4.5 1.5z" fill="#fff" opacity=".9"/><path d="M9.5 15l1.2 3.3L14 17" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/><defs><linearGradient id="logo-grad2" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#25D366"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs></svg>
+          SupaMsg
+        </div>
+        <p>The most powerful WhatsApp desktop client. 48 features designed to supercharge your messaging experience.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">Blog</a>
+        <a href="#">Support</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 SupaMsg. All rights reserved.</span>
+      <span>Made with care for WhatsApp power users</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== NAV SCROLL EFFECT =====
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ===== MOBILE NAV TOGGLE =====
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ===== INTERSECTION OBSERVER FOR SCROLL ANIMATIONS =====
+const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+// ===== ANIMATED COUNTERS =====
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      const suffix = target === 50 ? '+' : target === 100 ? '%' : '';
+      let current = 0;
+      const step = Math.ceil(target / 40);
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(interval);
+        }
+        el.textContent = current + suffix;
+      }, 30);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter-number').forEach(el => counterObserver.observe(el));
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// ===== CURRENCY DETECTION (INR/USD) =====
+(function() {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+  const isIndia = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
+  const currency = isIndia ? 'inr' : 'usd';
+  const symbol = isIndia ? '\u20B9' : '$';
+
+  // Set all currency symbols
+  document.querySelectorAll('.currency-symbol').forEach(el => el.textContent = symbol);
+
+  // Billing toggle
+  const toggle = document.getElementById('billingToggle');
+  const monthlyLabel = document.getElementById('toggleMonthly');
+  const annualLabel = document.getElementById('toggleAnnual');
+  let isAnnual = false;
+
+  function updatePrices() {
+    const suffix = isAnnual ? 'y' : 'm';
+    document.querySelectorAll('.price-dynamic').forEach(el => {
+      const price = el.dataset[currency + '-' + suffix] || el.dataset['usd-' + suffix];
+      const valueEl = el.querySelector('.price-value');
+      if (valueEl) valueEl.textContent = price;
+    });
+    document.querySelectorAll('.price-period').forEach(el => {
+      el.textContent = isAnnual ? '/mo, billed annually' : '/mo';
+    });
+  }
+
+  toggle.addEventListener('click', () => {
+    isAnnual = !isAnnual;
+    toggle.classList.toggle('active', isAnnual);
+    monthlyLabel.classList.toggle('active', !isAnnual);
+    annualLabel.classList.toggle('active', isAnnual);
+    updatePrices();
+  });
+
+  toggle.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+  });
+
+  updatePrices();
+})();
+
+// ===== SMOOTH SCROLL FOR NAV LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('navLinks').classList.remove('open');
+    }
+  });
+});
+</script>
+</body>
+</html>
