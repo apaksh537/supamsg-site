@@ -7,10 +7,13 @@
 <meta name="description" content="Manage multiple WhatsApp accounts from one desktop app. AI-powered, privacy-first, built for professionals.">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.png">
+<link rel="canonical" href="https://supamsg.com">
 <!-- Open Graph -->
 <meta property="og:title" content="SupaMsg — All Your WhatsApp Accounts, One Desktop App">
 <meta property="og:description" content="Manage multiple WhatsApp accounts from one window. 48 features including AI replies, scheduled messages, CRM, and more. Privacy-first.">
 <meta property="og:image" content="https://supamsg.com/screenshots/01-hero-shot.png">
+<meta property="og:image:width" content="2560">
+<meta property="og:image:height" content="1544">
 <meta property="og:url" content="https://supamsg.com">
 <meta property="og:type" content="website">
 <!-- Twitter Card -->
@@ -783,6 +786,9 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
   cursor: pointer;
   transition: 0.3s;
   border: 2px solid var(--black);
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
 }
 .pricing-toggle-switch.active { background: var(--green); }
 .pricing-toggle-switch::after {
@@ -1094,6 +1100,25 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
   background: var(--green);
   color: var(--black);
 }
+
+/* Billing toggle focus */
+.pricing-toggle-btn:focus {
+  outline: 3px solid var(--green);
+  outline-offset: 2px;
+}
+.pricing-toggle-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+.pricing-toggle-btn:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: none; }
+  .marquee-track { animation: none; }
+  * { animation-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -1101,7 +1126,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
 <!-- ==================== NAV ==================== -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">
+    <a href="/" class="nav-logo">
       <span>S</span>SupaMsg
     </a>
     <ul class="nav-links" id="navLinks">
@@ -1139,7 +1164,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
         </a>
         <a href="#features" class="btn btn-black">See Features</a>
       </div>
-      <p class="install-hint">macOS shows a warning on first open? <a onclick="document.getElementById('installGuide').classList.toggle('visible')">See install instructions</a></p>
+      <p class="install-hint">macOS shows a warning on first open? <button type="button" onclick="document.getElementById('installGuide').classList.toggle('visible')" style="background:none;border:none;padding:0;color:var(--green-dark);font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer;font-family:inherit;font-size:inherit;">See install instructions</button></p>
       <div class="install-guide" id="installGuide">
         <h3>How to install SupaMsg on Mac</h3>
         <ol class="install-steps">
@@ -1203,7 +1228,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
         <h3>All accounts. One window.</h3>
         <p>Switch between personal, work, and client WhatsApp accounts in a single click. No more juggling phones or browser tabs.</p>
         <div class="feature-card-img">
-          <img src="screenshots/02-multi-account.png" alt="Multi-account feature"
+          <img src="screenshots/02-multi-account.png" alt="SupaMsg showing multiple WhatsApp accounts side by side"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
           <div class="placeholder" style="display:none;">Multi-Account View</div>
         </div>
@@ -1213,7 +1238,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
         <h3>AI that actually helps.</h3>
         <p>Smart reply suggestions, message tone adjustment, auto-translation across 25 languages. Your AI assistant that never sleeps.</p>
         <div class="feature-card-img">
-          <img src="screenshots/03-ai-features.png" alt="AI features"
+          <img src="screenshots/03-ai-features.png" alt="AI-powered smart reply suggestions in SupaMsg"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
           <div class="placeholder" style="display:none;">AI Features View</div>
         </div>
@@ -1223,7 +1248,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
         <h3>Send later. Stress never.</h3>
         <p>Schedule messages for the perfect time. Birthday wishes at midnight, follow-ups on Monday morning, reminders before meetings.</p>
         <div class="feature-card-img">
-          <img src="screenshots/04-schedule.png" alt="Scheduling feature"
+          <img src="screenshots/04-schedule.png" alt="Schedule WhatsApp messages with date and time picker"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
           <div class="placeholder" style="display:none;">Schedule View</div>
         </div>
@@ -1233,7 +1258,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
         <h3>Your chats. Your rules.</h3>
         <p>App lock, hidden chats, incognito mode. Everything is end-to-end encrypted by WhatsApp. We never read or store your messages.</p>
         <div class="feature-card-img">
-          <img src="screenshots/05-privacy.png" alt="Privacy features"
+          <img src="screenshots/05-privacy.png" alt="SupaMsg privacy dashboard showing zero-access encryption"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
           <div class="placeholder" style="display:none;">Privacy View</div>
         </div>
@@ -1406,9 +1431,9 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
       <h2>Simple pricing.<br>No surprises.</h2>
       <div class="pricing-toggle">
         <span class="toggle-monthly-label">Monthly</span>
-        <div class="pricing-toggle-switch" id="billingToggle" role="button" tabindex="0" aria-label="Toggle annual billing"></div>
+        <button type="button" class="pricing-toggle-switch pricing-toggle-btn" id="billingToggle" aria-pressed="false" aria-label="Toggle annual billing"></button>
         <span class="toggle-annual-label">Annual</span>
-        <span class="pricing-annual-note">Save 20%</span>
+        <span class="pricing-annual-note">Save 33%</span>
       </div>
     </div>
     <div class="pricing-grid" id="pricingGrid">
@@ -1721,6 +1746,7 @@ h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; line-height: 1.2; 
   billingToggle.addEventListener('click', () => {
     isAnnual = !isAnnual;
     billingToggle.classList.toggle('active', isAnnual);
+    billingToggle.setAttribute('aria-pressed', isAnnual ? 'true' : 'false');
     updatePricing();
   });
 
